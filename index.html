@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Mundo Especial ♡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #ffecd2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #ff6b9d;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ff6b9d;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            color: #888;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .menu-btn {
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            border: none;
+            padding: 25px 15px;
+            border-radius: 20px;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.3s ease;
+        }
+
+        .menu-btn:hover::before {
+            left: 100%;
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-icon {
+            font-size: 2em;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .back-btn {
+            background: #ffb3ba;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 15px;
+            color: white;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #ff9aa2;
+            transform: translateX(-5px);
+        }
+
+        /* Estilos para el quiz */
+        .quiz-question {
+            background: linear-gradient(135deg, #fff5f7 0%, #ffe5ec 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .quiz-option {
+            background: white;
+            border: 3px solid #ffd1dc;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+        }
+
+        .quiz-option:hover {
+            background: #ffd1dc;
+            transform: translateX(10px);
+        }
+
+        .quiz-option.correct {
+            background: #90ee90;
+            border-color: #32cd32;
+        }
+
+        .quiz-option.incorrect {
+            background: #ffcccb;
+            border-color: #ff6b6b;
+        }
+
+        /* Estilos para el piano */
+        .piano {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin: 20px 0;
+        }
+
+        .piano-key {
+            background: linear-gradient(to bottom, #ffffff, #f0f0f0);
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 40px 10px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            text-align: center;
+            font-weight: bold;
+            color: #666;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .piano-key:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Estilos para el dibujo */
+        .drawing-canvas {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            touch-action: none;
+            cursor: crosshair;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .color-option {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .color-option:hover, .color-option.active {
+            transform: scale(1.1);
+            border-color: #333;
+        }
+
+        /* Estilos para adivina el emoji */
+        .emoji-display {
+            font-size: 5em;
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #fff5f7 0%, #ffe5ec 100%);
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+
+        /* Estilos para la cápsula del tiempo */
+        .capsule-entry {
+            background: linear-gradient(135deg, #fff5f7 0%, #ffe5ec 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border-left: 5px solid #ff6b9d;
+        }
+
+        .capsule-date {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .capsule-text {
+            color: #333;
+            line-height: 1.6;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ffd1dc;
+            border-radius: 15px;
+            font-family: inherit;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+            margin: 15px 0;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #ff6b9d;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Estilos para frases motivacionales */
+        .quote-box {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .quote-text {
+            font-size: 1.4em;
+            color: white;
+            line-height: 1.6;
+            font-style: italic;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Estilos para el contador de días */
+        .counter-display {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+
+        .counter-number {
+            font-size: 4em;
+            font-weight: bold;
+            color: #ff6b9d;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .counter-label {
+            font-size: 1.2em;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        /* Trivia con temporizador */
+        .timer-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .timer-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);
+            transition: width 0.1s linear;
+        }
+
+        /* Puntajes y logros */
+        .achievement {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .achievement-icon {
+            font-size: 2.5em;
+        }
+
+        .achievement-text {
+            flex: 1;
+        }
+
+        .achievement-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .achievement-desc {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .locked {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff6b9d;
+            font-size: 20px;
+            animation: float 4s ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts" id="hearts"></div>
+    
+    <div class="container">
+        <!-- Header con estadísticas -->
+        <div class="header">
+            <h1>✨ Tu Mundo Especial ✨</h1>
+            <p style="color: #888; margin-top: 10px;">Hecho con amor para ti</p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="totalPoints">0</div>
+                    <div class="stat-label">Puntos</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="gamesPlayed">0</div>
+                    <div class="stat-label">Juegos</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="achievements">0/10</div>
+                    <div class="stat-label">Logros</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menú Principal -->
+        <div class="section active" id="menu">
+            <h2 style="color: #ff6b9d; margin-bottom: 20px; text-align: center;">¿Qué quieres hacer?</h2>
+            <div class="menu-grid">
+                <button class="menu-btn" onclick="showSection('trivia')">
+                    <span class="btn-icon">🧠</span>
+                    Trivia Divertida
+                </button>
+                <button class="menu-btn" onclick="showSection('piano')">
+                    <span class="btn-icon">🎹</span>
+                    Piano Musical
+                </button>
+                <button class="menu-btn" onclick="showSection('drawing')">
+                    <span class="btn-icon">🎨</span>
+                    Dibuja Libre
+                </button>
+                <button class="menu-btn" onclick="showSection('emoji')">
+                    <span class="btn-icon">😊</span>
+                    Adivina Emoji
+                </button>
+                <button class="menu-btn" onclick="showSection('memory')">
+                    <span class="btn-icon">🎮</span>
+                    Memoria
+                </button>
+                <button class="menu-btn" onclick="showSection('quotes')">
+                    <span class="btn-icon">💭</span>
+                    Frases para ti
+                </button>
+                <button class="menu-btn" onclick="showSection('capsule')">
+                    <span class="btn-icon">⏰</span>
+                    Cápsula del Tiempo
+                </button>
+                <button class="menu-btn" onclick="showSection('counter')">
+                    <span class="btn-icon">💕</span>
+                    Nuestros Días
+                </button>
+                <button class="menu-btn" onclick="showSection('chat')">
+                    <span class="btn-icon">💌</span>
+                    Chat Secreto
+                </button>
+                <button class="menu-btn" onclick="showSection('achievements-view')">
+                    <span class="btn-icon">🏆</span>
+                    Mis Logros
+                </button>
+            </div>
+        </div>
+
+        <!-- Trivia -->
+        <div class="section" id="trivia">
+            <button class="back-btn" onclick="backToMenu()">← Volver</button>
+            <h2 style="color: #ff6b9d; text-align: center; margin-bottom: 10px;">Trivia de Pareja</h2>
+            <div class="timer-bar">
+                <div class="timer-fill" id="triviaTimer"></div>
+            </div>
+            <p style="text-align: center; color: #888; margin-bottom: 20px;">Puntos: <span id="triviaScore">0</span></p>
+            <div class="quiz-question" id="triviaQuestion"></div>
+            <div class="quiz-options" id="triviaOptions"></div>
+        </div>
+
+        <!-- Piano -->
+        <div class="section" id="piano">
+            <button class="back-btn" onclick="backToMenu()">← Volver</button>
+            <h2 style="color: #ff6b9d; text-align: center; margin-bottom: 20px;">Piano Musical</h2>
+            <p style="text-align: center; color: #888; margin-bottom: 15px;">Toca las notas y crea tu melodía</p>
+            <div class="piano" id="pianoKeys"></div>
+            <button class="action-btn" onclick="playSong()">🎵 Tocar canción especial</button>
+        </div>
+
+        <!-- Dibujo -->
+        <div class="section" id="drawing">
+            <button class="back-btn" onclick="backToMenu()">← Volver</button>
+            <h2 style="color: #ff6b9d; text-align: center; margin-bottom: 20px;">Dibuja lo que quieras</h2>
+            <div class="color-palette" id="colorPalette"></div>
+            <canvas id="canvas" class="drawing-canvas" width="550" height="400"></canvas>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="action-btn" onclick="clearCanvas()">🗑️ Limpiar</button>
+                <button class="action-btn" onclick="saveDrawing()">💾 Guardar</button>
+            </div>
+        </div>
+
+        <!-- Adivina el Emoji -->
+        <div class="section" id="emoji">
+            <button class="back-btn" onclick="backToMenu()">← Volver</button>
+            <h2 style="color: #ff6b9d; text-align: center; margin-bottom: 20px;">¿Qué representa?</h2>
+            <p style="text-align: center; color: #888; margin-bottom: 15px;">Puntos: <span id="emojiScore">0</span></p>
+            <div class="emoji-display" id="emojiDisplay"></div>
+            <div class="quiz-options" id="emojiOptions"></div>
+        </div>
+
+        <!-- Juego de Memoria -->
+        <div class="section" id="memory">
+            <button class="back-btn" onclick="backToMenu()">← Volver</button>
+            <h2 style="color: #ff6b9d; text-align: center; margin-bottom: 20px;">Encuentra las parejas</h2>
+            <p style="text-align: center; color: #888; margin-bottom: 15px;">Movimientos: <span id="memoryMoves">0</span></p>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;" id="memoryBoard"></div>
+        </div>
+
+        <!-- Frases Motivacionales -->
+        <div class="section" id="quotes">
+            <button class="back-btn" onclick="backToMenu()">← Volver</button>
+            <h2 style="color: #ff6b9d; text-align: center; margin-bottom: 20px;">Mensajes para ti</h2>
+            <div class="quote-box">
+                <p class="quote-text" id="quoteText"></p>
+            </div>
+            <button class="action-btn" onclick="nextQuote()">💕 Siguiente mensaje</button>
+        </div>
+
+        <!-- Cápsula del Tiempo -->
+        <div class="section" id="capsule">
+            <button class="back-btn" onclick="backToMenu()">← Volver</button>
+            <h2 style="color: #ff6b9d; text-align: center; margin-bottom: 20px;">Cápsula del Tiempo</h2>
+            <p style="text-align: center; color: #888; margin-bottom: 20px;">Escribe lo que sientes hoy</p>
+            <textarea id="capsuleInput" placeholder="¿Cómo te sientes? ¿Qué piensas hoy?..."></textarea>
+            <button class="action-btn" onclick="saveCapsule()">💌 Guardar en la cápsula</button>
+            <div id="capsuleList"></div>
+        </div>
+
+        <!-- Contador de Días -->
+        <div class="section" id="counter">
+            <button class="back-btn" onclick="backToMenu()">← Volver</button>
+            <h2 style="color: #ff6b9d; text-align: center; margin-bottom: 20px;">Nuestros Días Juntos</h2>
+            <div class="counter-display">
+                <div class="counter-number" id="daysCounter">0</div>
+                <div class="counter-label">días increíbles</div>
+            </div>
+            <p style="text-align: center; color: #888; margin-top: 20px;">
+                <button class="action-btn" onclick="setStartDate()">📅 Configurar fecha</button>
+            </p>
+        </div>
+
+        <!-- Chat Secreto -->
+        <div class="section" id="chat">
+            <button class="back-btn" onclick="backToMenu()">← Volver</button>
+            <h2 style="color: #ff6b9d; text-align: center; margin-bottom: 20px;">Chat Secreto</h2>
+            <p style="text-align: center; color: #888; margin-bottom: 20px;">Escribe mensajes que solo tú puedes ver después</p>
+            <div id="chatMessages" style="max-height: 300px; overflow-y: auto; margin: 20px 0;"></div>
+            <textarea id="chatInput" placeholder="Escribe tu mensaje..." style="min-height: 80px;"></textarea>
+            <button class="action-btn" onclick="sendMessage()">📨 Enviar mensaje</button>
+        </div>
+
+        <!-- Logros -->
+        <div class="section" id="achievements-view">
+            <button class="back-btn" onclick="backToMenu()">← Volver</button>
+            <h2 style="color: #ff6b9d; text-align: center; margin-bottom: 20px;">Tus Logros</h2>
+            <div id="achievementsList"></div>
+        </div>
+    </div>
+
+    <script>
+        // Sistema de puntos y estadísticas
+        let gameData = {
+            totalPoints: 0,
+            gamesPlayed: 0,
+            achievements: [],
+            triviaScore: 0,
+            emojiScore: 0,
+            memoryBestScore: Infinity,
+            capsules: [],
+            chatMessages: [],
+            drawings: 0,
+            songsPlayed: 0,
+            startDate: null
+        };
+
+        // Cargar datos guardados
+        function loadData() {
+            const saved = localStorage.getItem('specialAppData');
+            if (saved) {
+                gameData = JSON.parse(saved);
+                updateStats();
+            }
+        }
+
+        // Guardar datos
+        function saveData() {
+            localStorage.setItem('specialAppData', JSON.stringify(gameData));
+            updateStats();
+        }
+
+        // Actualizar estadísticas
+        function updateStats() {
+            document.getElementById('totalPoints').textContent = gameData.totalPoints;
+            document.getElementById('gamesPlayed').textContent = gameData.gamesPlayed;
+            document.getElementById('achievements').textContent = `${gameData.achievements.length}/10`;
+        }
+
+        // Sistema de logros
+        const achievementsList = [
+            { id: 'first_game', icon: '🎮', title: 'Primera vez', desc: 'Jugaste tu primer juego', condition: () => gameData.gamesPlayed >= 1 },
+            { id: 'trivia_master', icon: '🧠', title: 'Cerebrito', desc: 'Conseguiste 10 puntos en trivia', condition: () => gameData.triviaScore >= 10 },
+            { id: 'emoji_expert', icon: '😊', title: 'Experta en Emojis', desc: 'Adivinaste 15 emojis', condition: () => gameData.emojiScore >= 15 },
+            { id: 'artist', icon: '🎨', title: 'Artista', desc: 'Guardaste 3 dibujos', condition: () => gameData.drawings >= 3 },
+            { id: 'musician', icon: '🎹', title: 'Músico', desc: 'Tocaste 5 canciones', condition: () => gameData.songsPlayed >= 5 },
+            { id: 'writer', icon: '✍️', title: 'Escritora', desc: 'Guardaste 10 mensajes', condition: () => gameData.capsules.length >= 10 },
+            { id: 'dedicated', icon: '⭐', title: 'Dedicada', desc: 'Jugaste 20 veces', condition: () => gameData.gamesPlayed >= 20 },
+            { id: 'memory_pro', icon: '🎯', title: 'Memoria perfecta', desc: 'Completaste memoria en menos de 20 movimientos', condition: () => gameData.memoryBestScore < 20 },
+            { id: 'points_king', icon: '👑', title: 'Reina de puntos', desc: 'Conseguiste 100 puntos', condition: () => gameData.totalPoints >= 100 },
+            { id: 'complete', icon: '💎', title: 'Completista', desc: 'Jugaste todos los juegos', condition: () => gameData.gamesPlayed >= 30 }
+        ];
+
+        function checkAchievements() {
+            achievementsList.forEach(achievement => {
+                if (!gameData.achievements.includes(achievement.id) && achievement.condition()) {
+                    gameData.achievements.push(achievement.id);
+                    showAchievementNotification(achievement);
+                    createHearts();
+                }
+            });
+            saveData();
+        }
+
+        function showAchievementNotification(achievement) {
+            // Aquí podrías agregar una notificación visual
+            console.log(`¡Logro desbloqueado! ${achievement.title}`);
+        }
+
+        function displayAchievements() {
+            const list = document.getElementById('achievementsList');
+            list.innerHTML = '';
+            achievementsList.forEach(achievement => {
+                const unlocked = gameData.achievements.includes(achievement.id);
+                const div = document.createElement('div');
+                div.className = `achievement ${unlocked ? '' : 'locked'}`;
+                div.innerHTML = `
+                    <div class="achievement-icon">${achievement.icon}</div>
+                    <div class="achievement-text">
+                        <div class="achievement-title">${unlocked ? achievement.title : '???'}</div>
+                        <div class="achievement-desc">${unlocked ? achievement.desc : 'Logro bloqueado'}</div>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        // Navegación
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Inicializar la sección específica
+            if (sectionId === 'trivia') initTrivia();
+            if (sectionId === 'piano') initPiano();
+            if (sectionId === 'drawing') initDrawing();
+            if (sectionId === 'emoji') initEmoji();
+            if (sectionId === 'memory') initMemory();
+            if (sectionId === 'quotes') nextQuote();
+            if (sectionId === 'capsule') displayCapsules();
+            if (sectionId === 'counter') updateCounter();
+            if (sectionId === 'chat') displayChat();
+            if (sectionId === 'achievements-view') displayAchievements();
+        }
+
+        function backToMenu() {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('menu').classList.add('active');
+        }
+
+        // TRIVIA
+        const triviaQuestions = [
+            { q: "¿Cuál es tu lugar favorito para una cita?", o: ["Playa", "Montaña", "Ciudad", "Casa"], a: 0 },
+            { q: "¿Qué prefieres para desayunar?", o: ["Dulce", "Salado", "Frutas", "Café solo"], a: 0 },
+            { q: "¿Cuál es tu color favorito?", o: ["Rosa", "Azul", "Verde", "Morado"], a: 0 },
+            { q: "¿Qué tipo de música te gusta más?", o: ["Pop", "Rock", "Romántica", "Todo"], a: 3 },
+            { q: "¿Prefieres el día o la noche?", o: ["Día", "Noche", "Atardecer", "Amanecer"], a: 0 },
+            { q: "¿Película favorita para ver juntos?", o: ["Romance", "Comedia", "Acción", "Terror"], a: 1 },
+            { q: "¿Qué te gusta más hacer en tu tiempo libre?", o: ["Leer", "Ver series", "Salir", "Dormir"], a: 0 },
+            { q: "¿Cuál es tu estación del año favorita?", o: ["Primavera", "Verano", "Otoño", "Invierno"], a: 0 }
+        ];
+        let currentTrivia = 0;
+        let triviaTimer;
+
+        function initTrivia() {
+            currentTrivia = Math.floor(Math.random() * triviaQuestions.length);
+            displayTrivia();
+            startTriviaTimer();
+        }
+
+        function displayTrivia() {
+            const q = triviaQuestions[currentTrivia];
+            document.getElementById('triviaQuestion').innerHTML = `<h3 style="color: #ff6b9d;">${q.q}</h3>`;
+            const optionsDiv = document.getElementById('triviaOptions');
+            optionsDiv.innerHTML = '';
+            q.o.forEach((option, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'quiz-option';
+                btn.textContent = option;
+                btn.onclick = () => answerTrivia(index);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function startTriviaTimer() {
+            let time = 100;
+            const fill = document.getElementById('triviaTimer');
+            clearInterval(triviaTimer);
+            triviaTimer = setInterval(() => {
+                time -= 1;
+                fill.style.width = time + '%';
+                if (time <= 0) {
+                    clearInterval(triviaTimer);
+                    nextTrivia();
+                }
+            }, 100);
+        }
+
+        function answerTrivia(answer) {
+            clearInterval(triviaTimer);
+            const options = document.querySelectorAll('#triviaOptions .quiz-option');
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+            
+            if (answer === triviaQuestions[currentTrivia].a) {
+                options[answer].classList.add('correct');
+                gameData.triviaScore++;
+                gameData.totalPoints += 5;
+                createHearts();
+            } else {
+                options[answer].classList.add('incorrect');
+                options[triviaQuestions[currentTrivia].a].classList.add('correct');
+            }
+            
+            document.getElementById('triviaScore').textContent = gameData.triviaScore;
+            gameData.gamesPlayed++;
+            saveData();
+            checkAchievements();
+            
+            setTimeout(nextTrivia, 1500);
+        }
+
+        function nextTrivia() {
+            currentTrivia = (currentTrivia + 1) % triviaQuestions.length;
+            displayTrivia();
+            startTriviaTimer();
+        }
+
+        // PIANO
+        const notes = ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si'];
+        const frequencies = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88];
+
+        function initPiano() {
+            const piano = document.getElementById('pianoKeys');
+            piano.innerHTML = '';
+            notes.forEach((note, index) => {
+                const key = document.createElement('div');
+                key.className = 'piano-key';
+                key.textContent = note;
+                key.onclick = () => playNote(frequencies[index]);
+                piano.appendChild(key);
+            });
+        }
+
+        function playNote(frequency) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        function playSong() {
+            const song = [261.63, 293.66, 329.63, 293.66, 261.63, 261.63, 261.63];
+            const delays = [0, 300, 600, 900, 1200, 1500, 1800];
+            
+            song.forEach((note, index) => {
+                setTimeout(() => playNote(note), delays[index]);
+            });
+            
+            gameData.songsPlayed++;
+            gameData.gamesPlayed++;
+            gameData.totalPoints += 3;
+            saveData();
+            checkAchievements();
+            createHearts();
+        }
+
+        // DIBUJO
+        let canvas, ctx;
+        let isDrawing = false;
+        let currentColor = '#ff6b9d';
+
+        function initDrawing() {
+            canvas = document.getElementById('canvas');
+            ctx = canvas.getContext('2d');
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = currentColor;
+
+            const colors = ['#ff6b9d', '#a8e6cf', '#ffd93d', '#a8c7fa', '#dda0dd', '#ffb347', '#98fb98', '#ff69b4'];
+            const palette = document.getElementById('colorPalette');
+            palette.innerHTML = '';
+            
+            colors.forEach(color => {
+                const div = document.createElement('div');
+                div.className = 'color-option';
+                div.style.background = color;
+                if (color === currentColor) div.classList.add('active');
+                div.onclick = () => {
+                    currentColor = color;
+                    ctx.strokeStyle = color;
+                    document.querySelectorAll('.color-option').forEach(el => el.classList.remove('active'));
+                    div.classList.add('active');
+                };
+                palette.appendChild(div);
+            });
+
+            canvas.onmousedown = startDrawing;
+            canvas.onmousemove = draw;
+            canvas.onmouseup = stopDrawing;
+            canvas.onmouseout = stopDrawing;
+
+            canvas.ontouchstart = (e) => {
+                e.preventDefault();
+                startDrawing(e.touches[0]);
+            };
+            canvas.ontouchmove = (e) => {
+                e.preventDefault();
+                draw(e.touches[0]);
+            };
+            canvas.ontouchend = stopDrawing;
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function saveDrawing() {
+            const dataURL = canvas.toDataURL();
+            const link = document.createElement('a');
+            link.download = 'mi-dibujo.png';
+            link.href = dataURL;
+            link.click();
+            
+            gameData.drawings++;
+            gameData.totalPoints += 10;
+            gameData.gamesPlayed++;
+            saveData();
+            checkAchievements();
+            createHearts();
+            
+            alert('¡Dibujo guardado! 🎨');
+        }
+
+        // ADIVINA EL EMOJI
+        const emojiGames = [
+            { emoji: '🌙⭐', options: ['Noche', 'Espacio', 'Cielo', 'Día'], answer: 0 },
+            { emoji: '☕📖', options: ['Biblioteca', 'Cafetería', 'Estudio', 'Descanso'], answer: 3 },
+            { emoji: '🎵🎸', options: ['Concierto', 'Música', 'Radio', 'Fiesta'], answer: 1 },
+            { emoji: '🌸🌺', options: ['Jardín', 'Primavera', 'Flores', 'Naturaleza'], answer: 2 },
+            { emoji: '🍕🍔', options: ['Restaurante', 'Comida rápida', 'Cocina', 'Hambre'], answer: 1 },
+            { emoji: '🎬🍿', options: ['Cine', 'Netflix', 'Teatro', 'Película'], answer: 0 },
+            { emoji: '🏖️🌊', options: ['Playa', 'Verano', 'Vacaciones', 'Mar'], answer: 0 },
+            { emoji: '💐❤️', options: ['Amor', 'San Valentín', 'Cita', 'Regalo'], answer: 0 }
+        ];
+        let currentEmoji = 0;
+
+        function initEmoji() {
+            currentEmoji = Math.floor(Math.random() * emojiGames.length);
+            displayEmoji();
+        }
+
+        function displayEmoji() {
+            const game = emojiGames[currentEmoji];
+            document.getElementById('emojiDisplay').textContent = game.emoji;
+            document.getElementById('emojiScore').textContent = gameData.emojiScore;
+            
+            const optionsDiv = document.getElementById('emojiOptions');
+            optionsDiv.innerHTML = '';
+            game.options.forEach((option, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'quiz-option';
+                btn.textContent = option;
+                btn.onclick = () => answerEmoji(index);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function answerEmoji(answer) {
+            const options = document.querySelectorAll('#emojiOptions .quiz-option');
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+            
+            if (answer === emojiGames[currentEmoji].answer) {
+                options[answer].classList.add('correct');
+                gameData.emojiScore++;
+                gameData.totalPoints += 5;
+                createHearts();
+            } else {
+                options[answer].classList.add('incorrect');
+                options[emojiGames[currentEmoji].answer].classList.add('correct');
+            }
+            
+            document.getElementById('emojiScore').textContent = gameData.emojiScore;
+            gameData.gamesPlayed++;
+            saveData();
+            checkAchievements();
+            
+            setTimeout(() => {
+                currentEmoji = (currentEmoji + 1) % emojiGames.length;
+                displayEmoji();
+            }, 1500);
+        }
+
+        // MEMORIA
+        const memoryEmojis = ['🌸', '🌺', '🌻', '🌷', '🌹', '💐', '🦋', '✨'];
+        let memoryCards = [];
+        let flippedCards = [];
+        let memoryMoves = 0;
+
+        function initMemory() {
+            memoryMoves = 0;
+            document.getElementById('memoryMoves').textContent = '0';
+            memoryCards = [...memoryEmojis, ...memoryEmojis].sort(() => Math.random() - 0.5);
+            flippedCards = [];
+            
+            const board = document.getElementById('memoryBoard');
+            board.innerHTML = '';
+            
+            memoryCards.forEach((emoji, index) => {
+                const card = document.createElement('div');
+                card.style.cssText = 'aspect-ratio: 1; background: linear-gradient(135deg, #a8e6cf 0%, #ffd3e0 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 2em; cursor: pointer; transition: all 0.3s ease;';
+                card.textContent = '?';
+                card.dataset.emoji = emoji;
+                card.dataset.index = index;
+                card.onclick = () => flipMemoryCard(card, emoji, index);
+                board.appendChild(card);
+            });
+        }
+
+        function flipMemoryCard(card, emoji, index) {
+            if (flippedCards.length === 2 || card.classList.contains('flipped')) return;
+            
+            card.textContent = emoji;
+            card.classList.add('flipped');
+            flippedCards.push({ card, emoji, index });
+
+            if (flippedCards.length === 2) {
+                memoryMoves++;
+                document.getElementById('memoryMoves').textContent = memoryMoves;
+                
+                setTimeout(() => {
+                    if (flippedCards[0].emoji === flippedCards[1].emoji) {
+                        flippedCards[0].card.style.opacity = '0.6';
+                        flippedCards[1].card.style.opacity = '0.6';
+                        flippedCards[0].card.style.pointerEvents = 'none';
+                        flippedCards[1].card.style.pointerEvents = 'none';
+                        gameData.totalPoints += 5;
+                        createHearts();
+                        
+                        // Check si ganó
+                        if (document.querySelectorAll('#memoryBoard div[style*="opacity: 0.6"]').length === 16) {
+                            setTimeout(() => {
+                                alert(`¡Ganaste en ${memoryMoves} movimientos! 🎉`);
+                                if (memoryMoves < gameData.memoryBestScore) {
+                                    gameData.memoryBestScore = memoryMoves;
+                                }
+                                gameData.gamesPlayed++;
+                                saveData();
+                                checkAchievements();
+                            }, 500);
+                        }
+                    } else {
+                        flippedCards[0].card.textContent = '?';
+                        flippedCards[1].card.textContent = '?';
+                        flippedCards[0].card.classList.remove('flipped');
+                        flippedCards[1].card.classList.remove('flipped');
+                    }
+                    flippedCards = [];
+                }, 800);
+            }
+        }
+
+        // FRASES
+        const quotes = [
+            "Eres la razón por la que sonrío cada día ♡",
+            "Tu risa es mi sonido favorito del mundo 🌟",
+            "Contigo, hasta los días grises son coloridos 🌈",
+            "Eres más increíble de lo que imaginas ✨",
+            "Tu felicidad es mi prioridad número uno 💕",
+            "Gracias por ser exactamente quien eres 🌸",
+            "Cada momento contigo es un tesoro 💎",
+            "Tu presencia ilumina mi vida 🌞",
+            "Eres fuerte, hermosa y capaz de todo 💪",
+            "Me haces querer ser mejor persona cada día 🦋",
+            "Tu corazón es el lugar más hermoso 💖",
+            "Eres mi persona favorita en todo el mundo 🌍",
+            "Juntos podemos con cualquier cosa 🚀",
+            "Tu sonrisa puede cambiar mi día completo 😊",
+            "Eres suficiente, siempre lo has sido ⭐",
+            "Te quiero exactamente como eres 🥰",
+            "Eres mi hogar, donde sea que estés 🏠",
+            "Tu amor me hace ser valiente 🦁",
+            "Eres arte en movimiento 🎨",
+            "Mereces todo lo bueno de este mundo 🌺"
+        ];
+        let currentQuote = 0;
+
+        function nextQuote() {
+            currentQuote = Math.floor(Math.random() * quotes.length);
+            document.getElementById('quoteText').textContent = quotes[currentQuote];
+            createHearts();
+        }
+
+        // CÁPSULA DEL TIEMPO
+        function saveCapsule() {
+            const text = document.getElementById('capsuleInput').value.trim();
+            if (!text) {
+                alert('¡Escribe algo primero!');
+                return;
+            }
+            
+            const entry = {
+                text: text,
+                date: new Date().toLocaleString('es-ES')
+            };
+            
+            gameData.capsules.unshift(entry);
+            gameData.totalPoints += 10;
+            gameData.gamesPlayed++;
+            saveData();
+            checkAchievements();
+            
+            document.getElementById('capsuleInput').value = '';
+            displayCapsules();
+            createHearts();
+            alert('¡Guardado en tu cápsula del tiempo! 💌');
+        }
+
+        function displayCapsules() {
+            const list = document.getElementById('capsuleList');
+            list.innerHTML = '';
+            
+            if (gameData.capsules.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #888; margin-top: 30px;">Tu cápsula está vacía... ¡empieza a escribir!</p>';
+                return;
+            }
+            
+            gameData.capsules.forEach(capsule => {
+                const div = document.createElement('div');
+                div.className = 'capsule-entry';
+                div.innerHTML = `
+                    <div class="capsule-date">${capsule.date}</div>
+                    <div class="capsule-text">${capsule.text}</div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        // CONTADOR DE DÍAS
+        function setStartDate() {
+            const date = prompt('¿Desde qué fecha quieres contar? (formato: YYYY-MM-DD)');
+            if (date) {
+                gameData.startDate = date;
+                saveData();
+                updateCounter();
+            }
+        }
+
+        function updateCounter() {
+            if (!gameData.startDate) {
+                document.getElementById('daysCounter').textContent = '?';
+                return;
+            }
+            
+            const start = new Date(gameData.startDate);
+            const now = new Date();
+            const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+            document.getElementById('daysCounter').textContent = diff;
+        }
+
+        // CHAT SECRETO
+        function sendMessage() {
+            const text = document.getElementById('chatInput').value.trim();
+            if (!text) return;
+            
+            const message = {
+                text: text,
+                date: new Date().toLocaleString('es-ES', { hour: '2-digit', minute: '2-digit' })
+            };
+            
+            gameData.chatMessages.push(message);
+            gameData.totalPoints += 2;
+            saveData();
+            
+            document.getElementById('chatInput').value = '';
+            displayChat();
+        }
+
+        function displayChat() {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = '';
+            
+            if (gameData.chatMessages.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #888;">No hay mensajes todavía...</p>';
+                return;
+            }
+            
+            gameData.chatMessages.forEach(msg => {
+                const div = document.createElement('div');
+                div.style.cssText = 'background: linear-gradient(135deg, #fff5f7 0%, #ffe5ec 100%); padding: 15px; border-radius: 15px; margin: 10px 0; border-left: 4px solid #ff6b9d;';
+                div.innerHTML = `
+                    <div style="color: #888; font-size: 0.8em; margin-bottom: 5px;">${msg.date}</div>
+                    <div style="color: #333;">${msg.text}</div>
+                `;
+                container.appendChild(div);
+            });
+            
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // CORAZONES FLOTANTES
+        function createHearts() {
+            const container = document.getElementById('hearts');
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = '♡';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDelay = Math.random() * 0.5 + 's';
+                    container.appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 100);
+            }
+        }
+
+        // Inicialización
+        window.onload = () => {
+            loadData();
+            setInterval(() => {
+                if (Math.random() < 0.2) createHearts();
+            }, 4000);
+        };
+    </script>
+</body>
+</html>
